@@ -1,0 +1,48 @@
+# repoServer:
+#   volumeMounts:
+#   - mountPath: /usr/local/bin/tk
+#     name: tanka-bin
+#   volumes:
+#   - name: tanka-bin
+#     emptyDir: {}
+#   initContainers:
+#   - name: install-tanka
+#     image: alpine:3.14
+#     volumeMounts:
+#     - mountPath: /custom-tools
+#       name: tanka-bin
+#     command: ["/bin/sh", "-c"]
+#     args:
+#       - apk add --no-cache curl &&
+#         curl -L https://github.com/grafana/tanka/releases/download/v0.26.0/tk-linux-amd64 -o /custom-tools/tk &&
+#         chmod +x /custom-tools/tk
+#   extraContainers:
+#   - name: tanka
+#     image: alpine:3.14
+#     command: ["/bin/sleep"]
+#     args: ["infinity"]
+#     volumeMounts:
+#     - mountPath: /custom-tools
+#       name: tanka-bin
+
+# configs:
+#   cmp:
+#     create: true
+#     plugins:
+#       # Example Tanka plugin configuration
+#       tanka:
+#         init:
+#           command: ["/bin/sh", "-c"]
+#           args: ["echo 'Initializing Tanka'"]
+#         generate:
+#           command: ["/bin/sh", "-c"]
+#           args: [
+#             "if [ -f /custom-tools/tk ]; then /custom-tools/tk show environments/${ENVIRONMENT_NAME} --dangerous-allow-redirect; else echo 'Tanka not found'; exit 1; fi"
+#           ]
+#         discover:
+#           # This is a hypothetical example, as Tanka's discovery would depend on specific Jsonnet/Tanka files present
+#           fileName: "jsonnetfile.json"
+#           find:
+#             glob: "**/*.libsonnet"
+#             command: ["/bin/sh", "-c", "find . -name '*.libsonnet'"]
+

@@ -1,0 +1,4 @@
+apiVersion: v2
+name: mywebapp
+description: A Helm chart for Kubernetes to deploy a fault-tolerant and scalable Go web app
+version: "0.10"

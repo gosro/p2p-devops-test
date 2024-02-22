@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mywebapp
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/gosro/p2p-devops-test.git'
+    path: 'helm/mywebapp'
+    targetRevision: HEAD
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: webapp
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true

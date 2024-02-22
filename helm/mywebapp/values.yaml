@@ -1,0 +1,65 @@
+# Customization for overriding names
+nameOverride: "default"
+fullnameOverride: "default"
+
+ingress:
+  enabled: false
+  className: "gce"
+  annotations: {}
+  staticIPName: ""
+  useTLS: false
+  tlsSecretName: ""
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+
+
+# Number of replicas
+replicaCount: 2
+
+# Application image details
+image:
+  repository: us-central1-docker.pkg.dev/p2p-test-414709/p2p-test/webapp
+  tag: latest
+  pullPolicy: IfNotPresent
+
+# Service settings
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 3000
+
+# Pod resource requests & limits
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "250m"
+  limits:
+    memory: "128Mi"
+    cpu: "500m"
+
+
+# Autoscaling settings
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+
+# Liveness probe settings
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 5
+
+# Readiness probe settings
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 5

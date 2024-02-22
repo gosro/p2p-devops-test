@@ -1,0 +1,11 @@
+{
+  "apiVersion": "tanka.dev/v1alpha1",
+  "kind": "Environment",
+  "spec": {
+    "contextNames": ["context"]
+  },
+  "metadata": {
+    "name": "default",
+    "namespace": "default"
+  }
+}

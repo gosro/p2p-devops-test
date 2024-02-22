@@ -1,0 +1,36 @@
+{{- if .Values.ingress.enabled }}
+{{- $fullName := include "mywebapp.fullname" . -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  annotations:
+    {{- if .Values.ingress.staticIPName }}
+    kubernetes.io/ingress.global-static-ip-name: {{ .Values.ingress.staticIPName }}
+    {{- end }}
+    {{- toYaml .Values.ingress.annotations | nindent 4 }}
+spec:
+  {{- if .Values.ingress.useTLS }}
+  tls:
+    - secretName: {{ .Values.ingress.tlsSecretName }}
+      hosts:
+        {{- range .Values.ingress.hosts }}
+        - {{ .host }}
+        {{- end }}
+  {{- end }}
+  rules:
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
+            backend:
+              service:
+                name: {{ $fullName }}
+                port:
+                  number: {{ $.Values.service.port }}
+          {{- end }}
+    {{- end }}
+{{- end }}
