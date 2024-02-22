@@ -25,11 +25,11 @@
       "source": {
         "git": {
           "remote": "https://github.com/jsonnet-libs/k8s-libsonnet.git",
-          "subdir": "1.20"
+          "subdir": "1.27"
         }
       },
       "version": "3e32f80d1493d1579d273d1522af1fae2cc7c97f",
-      "sum": "KXx5RVXiqTJQo2GVfrD8DIvlm292s0TxfTKT8I591+c="
+      "sum": "UUehweIZbfxH3XA3iVc7D2U8NTtvOqjEKI7z/Cd6kzE="
     }
   ],
   "legacyImports": false

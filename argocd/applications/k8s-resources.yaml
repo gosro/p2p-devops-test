@@ -7,8 +7,12 @@ spec:
   project: default
   source:
     repoURL: 'https://github.com/gosro/p2p-devops-test.git'
-    path: 'kubernetes/configs/'
+    path: 'my-k8s-configs/'
     targetRevision: HEAD
+    plugin:
+      env:
+       - name: ENVIRONMENT_NAME
+         value: "default"  # This should be dynamic based on your deployment needs
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: default

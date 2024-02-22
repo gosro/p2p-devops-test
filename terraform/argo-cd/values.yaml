@@ -1,48 +1,51 @@
-# repoServer:
-#   volumeMounts:
-#   - mountPath: /usr/local/bin/tk
-#     name: tanka-bin
-#   volumes:
-#   - name: tanka-bin
-#     emptyDir: {}
-#   initContainers:
-#   - name: install-tanka
-#     image: alpine:3.14
-#     volumeMounts:
-#     - mountPath: /custom-tools
-#       name: tanka-bin
-#     command: ["/bin/sh", "-c"]
-#     args:
-#       - apk add --no-cache curl &&
-#         curl -L https://github.com/grafana/tanka/releases/download/v0.26.0/tk-linux-amd64 -o /custom-tools/tk &&
-#         chmod +x /custom-tools/tk
-#   extraContainers:
-#   - name: tanka
-#     image: alpine:3.14
-#     command: ["/bin/sleep"]
-#     args: ["infinity"]
-#     volumeMounts:
-#     - mountPath: /custom-tools
-#       name: tanka-bin
+configs:
+  params:
+    server.insecure: true
+  cmp:
+    create: true
+    plugins:
+      tanka:
+        generate:
+          command: ["/usr/local/bin/tk"]
+          args: ["show", "environments/${ENVIRONMENT_NAME}"]
+        discover:
+          fileName: "jsonnetfile.json"
+          # Adjusting the discovery to focus on the structured use of environments and libraries
+          find:
+            glob: "environments/**/*.jsonnet"
+            command: ["/bin/sh", "-c", "find ./environments -type f -name '*.jsonnet'"]
 
-# configs:
-#   cmp:
-#     create: true
-#     plugins:
-#       # Example Tanka plugin configuration
-#       tanka:
-#         init:
-#           command: ["/bin/sh", "-c"]
-#           args: ["echo 'Initializing Tanka'"]
-#         generate:
-#           command: ["/bin/sh", "-c"]
-#           args: [
-#             "if [ -f /custom-tools/tk ]; then /custom-tools/tk show environments/${ENVIRONMENT_NAME} --dangerous-allow-redirect; else echo 'Tanka not found'; exit 1; fi"
-#           ]
-#         discover:
-#           # This is a hypothetical example, as Tanka's discovery would depend on specific Jsonnet/Tanka files present
-#           fileName: "jsonnetfile.json"
-#           find:
-#             glob: "**/*.libsonnet"
-#             command: ["/bin/sh", "-c", "find . -name '*.libsonnet'"]
+repoServer:
+  extraContainers:
+    - name: tanka-plugin
+      command: ["/var/run/argocd/argocd-cmp-server"]
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+      image: grafana/tanka:main-1975c28
+      volumeMounts:
+        - mountPath: /var/run/argocd
+          name: var-files
+        - mountPath: /home/argocd/cmp-server/plugins
+          name: plugins
+        - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+          subPath: tanka.yaml
+          name: argocd-cmp-cm
+  volumes:
+    - name: argocd-cmp-cm
+      configMap:
+        name: argocd-cmp-cm
 
+# repositories:
+#   main-repo:
+#     url: https://github.com/gosro/p2p-devops-test.git
+#   traefik:
+#     url: https://traefik.github.io/charts
+#     type: helm
+
+# server:
+#   ingress:
+#     enabled: true
+#     hostname: argocd.p2p-test.local
+#     annotations:
+#       traefik.ingress.kubernetes.io/router.tls: "true"

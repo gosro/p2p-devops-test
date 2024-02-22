@@ -48,3 +48,6 @@ p2p-test-414709-7391ce207370.json
 .terraform.lock.hcl
 variables.tf
 kubernetes/configs/manifest.json
+# Ignore everything in vendor except github.com
+my-k8s-configs/vendor/*
+!my-k8s-configs/vendor/github.com/

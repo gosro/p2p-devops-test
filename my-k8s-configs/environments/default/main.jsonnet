@@ -12,8 +12,6 @@ local secret(name, data) = k.core.v1.secret.new(name, data); // Adjusted
     namespace('dev'),
     namespace('test'),
     namespace('prod'),
-    namespace('argocd'),
-    namespace('webapp'),
   ],
 
   serviceAccounts: [
