@@ -7,7 +7,7 @@ configs:
       tanka:
         generate:
           command: ["/usr/local/bin/tk"]
-          args: ["show","--dangerous-allow-redirect"]
+          args: ["show",".","--dangerous-allow-redirect"]
         discover:
           fileName: "jsonnetfile.json"
           # Adjusting the discovery to focus on the structured use of environments and libraries

@@ -10,6 +10,11 @@
       kind: "Namespace",
       metadata: { name: "staging" },
     },
+    {
+      apiVersion: "v1",
+      kind: "Namespace",
+      metadata: { name: "webapp" },
+    },
   ],
   service_accounts: [
     {
