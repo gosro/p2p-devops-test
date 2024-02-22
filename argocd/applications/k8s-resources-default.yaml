@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: 'https://github.com/gosro/p2p-devops-test.git'
-    path: 'my-k8s-configs/environments/default'
+    path: 'my-k8s-dev/environments/default'
     targetRevision: HEAD
   destination:
     server: 'https://kubernetes.default.svc'
