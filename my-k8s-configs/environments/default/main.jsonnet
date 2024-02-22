@@ -1,5 +1,5 @@
 // Import the Kubernetes library
-local k = import 'k.libsonnet';
+local k = import '../lib/k.libsonnet';
 
 // Define reusable components
 local namespace(name) = k.core.v1.namespace.new(name);
